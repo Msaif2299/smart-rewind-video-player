@@ -5,7 +5,8 @@ version="0.1.0"
 description="Smart Rewind Video Player for Accessibility Interventions"
 dependencies=[
     "tk",
-    "python-vlc"
+    "python-vlc",
+    "pyqt5"
 ]
 
 [build-system]
