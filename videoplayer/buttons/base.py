@@ -4,9 +4,13 @@ Stylesheet source: https://forum.qt.io/topic/41771/solved-setstylesheet-to-qpush
 
 from PyQt5.QtWidgets import QMainWindow,QWidget, QPushButton, QAction, QStyle
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
+import winsound
+import sys
+from typing import Optional
+from slider import Slider
 
 class Button(QPushButton):
-    def __init__(self, icon, mediaPlayer, action) -> None:
+    def __init__(self, icon, mediaPlayer, positionSlider: Optional[Slider], action) -> None:
         super().__init__()
         self.setEnabled(False)
         self.setStyleSheet("""
@@ -41,5 +45,14 @@ class Button(QPushButton):
             self.setIcon(self.style().standardIcon(icon))
         else:
             self.setIcon(icon)
-        self.clicked.connect(action)
+        if action is not None:
+            self.clicked.connect(action)
         self.mediaPlayer = mediaPlayer
+        self.slider = positionSlider
+
+    def alert(self, isWindows):
+        if isWindows:
+            winsound.MessageBeep(winsound.MB_ICONEXCLAMATION) 
+            return  
+        sys.stdout.write('\a')
+        sys.stdout.flush()

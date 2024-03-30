@@ -9,7 +9,6 @@ Add smart rewind button functionality and add visual markers on progress bar
 Check how to add this codec "https://www.codecguide.com/configuration_tips.htm?version=1820" as a requirement
 See if its possible to convert this to .exe file
 """
-
 from PyQt5.QtCore import QDir, Qt, QUrl
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
@@ -20,8 +19,9 @@ from PyQt5.QtGui import QIcon
 import sys
 from PyQt5.QtCore import QSettings
 
-from buttons import PlayButton, ForwardButton, BackwardButton, CharacterSmartRewindButton, SceneSmartRewindButton, SceneSmartForwardButton, CharacterSmartForwardButton
+from buttons import PlayButton, ForwardButton, BackwardButton, CharacterSmartRewindButton, SceneSmartRewindButton, SceneSmartForwardButton, CharacterSmartForwardButton, ReturnToLastTimestampButton
 from model import Model
+from slider import Slider
 
 class VideoWindow(QMainWindow):
 
@@ -34,19 +34,20 @@ class VideoWindow(QMainWindow):
         
         self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
 
+        self.positionSlider = Slider(Qt.Horizontal)
+        self.positionSlider.setRange(0, 0)
+        self.positionSlider.sliderMoved.connect(self.setPosition)
+
         videoWidget = QVideoWidget()
 
         self.playButton = PlayButton(self.mediaPlayer)
         self.forwardButton = ForwardButton(self.mediaPlayer)
         self.backwardButton = BackwardButton(self.mediaPlayer)
-        self.charSmartRewindButton = CharacterSmartRewindButton(self.mediaPlayer, self.model)
-        self.sceneRewindButton = SceneSmartRewindButton(self.mediaPlayer, self.model)
-        self.charSmartForwardButton = CharacterSmartForwardButton(self.mediaPlayer, self.model)
-        self.sceneForwardButton = SceneSmartForwardButton(self.mediaPlayer, self.model)
-
-        self.positionSlider = QSlider(Qt.Horizontal)
-        self.positionSlider.setRange(0, 0)
-        self.positionSlider.sliderMoved.connect(self.setPosition)
+        self.charSmartRewindButton = CharacterSmartRewindButton(self.mediaPlayer, self.positionSlider)
+        self.sceneRewindButton = SceneSmartRewindButton(self.mediaPlayer, self.positionSlider)
+        self.charSmartForwardButton = CharacterSmartForwardButton(self.mediaPlayer, self.positionSlider)
+        self.sceneForwardButton = SceneSmartForwardButton(self.mediaPlayer, self.positionSlider)
+        self.returnToTimestampButton = ReturnToLastTimestampButton(self.mediaPlayer, self.positionSlider)
 
         self.timeViewer = QLabel()
         self.timeViewer.setText(self.model.getTimeLabelStr())
@@ -94,6 +95,7 @@ class VideoWindow(QMainWindow):
         buttonLayout.addWidget(self.forwardButton)
         buttonLayout.addWidget(self.sceneForwardButton)
         buttonLayout.addWidget(self.charSmartForwardButton)
+        buttonLayout.addWidget(self.returnToTimestampButton)
         buttonLayout.addStretch()
 
         layout = QVBoxLayout()
@@ -135,10 +137,11 @@ class VideoWindow(QMainWindow):
             self.playButton.setEnabled(True)
             self.forwardButton.setEnabled(True)
             self.backwardButton.setEnabled(True)
-            self.charSmartRewindButton.setEnabled(True)
-            self.sceneRewindButton.setEnabled(True)
-            self.charSmartForwardButton.setEnabled(True)
-            self.sceneForwardButton.setEnabled(True)
+            self.charSmartForwardButton.setup(self.model)
+            self.charSmartRewindButton.setup(self.model)
+            self.sceneRewindButton.setup(self.model)
+            self.sceneForwardButton.setup(self.model)
+            self.returnToTimestampButton.setup(self.model)
             self.play()
 
     def exitCall(self):

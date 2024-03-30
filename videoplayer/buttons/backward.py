@@ -4,7 +4,7 @@ from .base import Button
 
 class BackwardButton(Button):
     def __init__(self, mediaPlayer) -> None:
-        super().__init__(QStyle.SP_MediaSkipBackward, mediaPlayer, self.backward)
+        super().__init__(QStyle.SP_MediaSkipBackward, mediaPlayer, None, self.backward)
 
     def backward(self):
         if self.mediaPlayer.position() - 10000 < 0:

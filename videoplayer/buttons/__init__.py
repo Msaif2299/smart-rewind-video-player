@@ -5,3 +5,4 @@ from .charsmartrewind import CharacterSmartRewindButton
 from .scenesmartrewind import SceneSmartRewindButton
 from .scenesmartforward import SceneSmartForwardButton
 from .charsmartforward import CharacterSmartForwardButton
+from .returntolast import ReturnToLastTimestampButton

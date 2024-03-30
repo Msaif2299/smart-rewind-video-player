@@ -1,13 +1,19 @@
+import platform
 class Model:
     def __init__(self) -> None:
         self.currentDuration = 0
         self.totalDuration = 0
+        self.storedDuration = 0
+        self.isWindows = platform.system() == "Windows"
 
     def setCurrentDuration(self, currentDuration: int):
         self.currentDuration = currentDuration
 
     def setTotalDuration(self, totalDuration: int):
         self.totalDuration = totalDuration
+
+    def setStoredDuration(self, storedDuration: int):
+        self.storedDuration = storedDuration
 
     # Converts milliseconds to format "HH:MM:SS"
     def convertToHHMMSS(self, millseconds: int) -> str:
@@ -19,19 +25,29 @@ class Model:
     def getCurrentDurationStr(self) -> str:
         return self.convertToHHMMSS(self.currentDuration)
     
+    def getCurrentDuration(self) -> int:
+        return self.currentDuration
+    
     def getTotalDurationStr(self) -> str:
         return self.convertToHHMMSS(self.totalDuration)
+    
+    def getTotalDuration(self) -> int:
+        return self.totalDuration
     
     def getTimeLabelStr(self):
         return f"{self.getCurrentDurationStr()} / {self.getTotalDurationStr()}"
         
+    def getStoredDuration(self) -> int:
+        return self.storedDuration
     
     def setTimeslots(self, data):
+        self.character_timeslots = []
+        self.scene_timeslots = []
         self.character_timeslots = data["CHAR"]
         self.scene_timeslots = data["SEG"]
 
-    def get_char_timeslot(self, char_name):
-        pass
+    def get_char_timeslots(self):
+        return self.character_timeslots
         
-    def get_scene_timeslot(self, current_timestamp):
-        pass
+    def getSceneTimeslots(self):
+        return self.scene_timeslots

@@ -1,4 +1,6 @@
 venv
 videoplayer.egg-info
 videoplayer/__pycache__
+videoplayer/buttons/__pycache__
+videoplayer/slider/__pycache__
 pyqt_settings.ini

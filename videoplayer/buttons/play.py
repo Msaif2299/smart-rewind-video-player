@@ -4,7 +4,7 @@ from .base import Button
 
 class PlayButton(Button):
     def __init__(self, mediaPlayer) -> None:
-        super().__init__(QStyle.SP_MediaPlay, mediaPlayer, self.play)
+        super().__init__(QStyle.SP_MediaPlay, mediaPlayer, None, self.play)
 
     def play(self):
         if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
