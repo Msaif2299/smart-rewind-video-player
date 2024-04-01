@@ -1,13 +1,11 @@
 from PyQt5 import QtGui
 from PyQt5.QtCore import QFileInfo
 from .hoverbutton import HoverButton, HoverButtonAction
-import winsound
-import sys
 
 class CharacterSmartForwardButton(HoverButton):
-    def __init__(self, mediaPlayer, positionSlider) -> None:
+    def __init__(self, mediaPlayer, positionSlider, logger) -> None:
         icon = QtGui.QIcon(QFileInfo(__file__).absolutePath() + '/../assets/charsmartfowardicon.ico')
-        super().__init__(icon, mediaPlayer, positionSlider)
+        super().__init__(icon, mediaPlayer, positionSlider, logger)
 
     def setup(self, model):
         self.model = model

@@ -3,4 +3,7 @@ videoplayer.egg-info
 videoplayer/__pycache__
 videoplayer/buttons/__pycache__
 videoplayer/slider/__pycache__
+videoplayer/mediaplayer/__pycache__
+videoplayer/eventlogger/__pycache__
+videoplayer/logs
 pyqt_settings.ini

@@ -1,10 +1,21 @@
 import platform
+from PyQt5.QtCore import QSettings
+
 class Model:
     def __init__(self) -> None:
         self.currentDuration = 0
         self.totalDuration = 0
         self.storedDuration = 0
         self.isWindows = platform.system() == "Windows"
+        self.settings = QSettings("pyqt_settings.ini", QSettings.IniFormat)
+        self.lastFolderOpened = self.settings.value("LastFolder")
+
+    def getLastOpenedFolder(self) -> str:
+        return self.lastFolderOpened
+    
+    def setLastOpenedFolder(self, folder: str) -> None:
+        self.lastFolderOpened = folder
+        self.settings.setValue("LastFolder", self.lastFolderOpened)
 
     def setCurrentDuration(self, currentDuration: int):
         self.currentDuration = currentDuration

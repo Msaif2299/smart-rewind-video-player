@@ -1,5 +1,4 @@
-import sys
-from PyQt5.QtWidgets import QApplication, QPushButton, QMenu, QAction
+from PyQt5.QtWidgets import QMenu, QAction
 from .base import Button
 from typing import List
 
@@ -9,8 +8,8 @@ class HoverButtonAction:
         self.action = action
 
 class HoverButton(Button):
-    def __init__(self, icon, mediaPlayer, positionSlider):
-        super().__init__(icon, mediaPlayer, positionSlider, None)
+    def __init__(self, icon, mediaPlayer, positionSlider, logger):
+        super().__init__(icon, mediaPlayer, positionSlider, None, logger)
         self.setMouseTracking(True)
         self.menu = QMenu(self)
     
