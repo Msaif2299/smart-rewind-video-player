@@ -21,6 +21,17 @@ class SceneSmartForwardButton(Button):
                 self.slider.showTicker()
                 self.slider.setTickerPosition(cur_time)
                 self.model.setStoredDuration(cur_time)
+            self.log_data(True, slot[0])
             self.mediaPlayer.setPosition(slot[0])
             return
         self.alert(self.model.isWindows)
+        self.log_data(False, -1)
+
+    def log_data(self, success: bool, new_timestamp: int) -> str:
+        data = {
+            "e_name": "SceneSmartForwardButtonPressed",
+            "current_timestamp": self.mediaPlayer.position(),
+            "new_timestamp": new_timestamp,
+            "success": success
+        }
+        self.logger.log(data)

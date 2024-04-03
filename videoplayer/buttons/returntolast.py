@@ -14,6 +14,17 @@ class ReturnToLastTimestampButton(Button):
     def _return(self):
         if not self.slider.isTickerVisible() or self.model.getStoredDuration() == 0:
             self.alert(self.model.isWindows)
+            self.log_data(False, -1)
             return
         self.slider.hideTicker()
+        self.log_data(True, self.model.getStoredDuration())
         self.mediaPlayer.setPosition(self.model.getStoredDuration())
+
+    def log_data(self, success: bool, new_timestamp: int) -> str:
+        data = {
+            "e_name": "ReturnToLastTimestampButtonPressed",
+            "current_timestamp": self.mediaPlayer.position(),
+            "success": success,
+            "new_timestamp": new_timestamp
+        }
+        self.logger.log(data)
