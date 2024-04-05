@@ -6,4 +6,5 @@ videoplayer/slider/__pycache__
 videoplayer/mediaplayer/__pycache__
 videoplayer/eventlogger/__pycache__
 videoplayer/logs
+videoplayer/errorlogs
 pyqt_settings.ini

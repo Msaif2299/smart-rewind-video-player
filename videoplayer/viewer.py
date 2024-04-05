@@ -11,28 +11,47 @@ See if its possible to convert this to .exe file
 """
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QVBoxLayout, QWidget)
-from PyQt5.QtWidgets import QMainWindow,QWidget, QAction
+from PyQt5.QtWidgets import QMainWindow,QWidget, QAction, QMessageBox
 from PyQt5.QtGui import QCloseEvent, QIcon
 import sys
 
 from controller import Controller
-from eventlogger import Logger
+from eventlogger import Logger, ErrorLogger
 
 class Viewer(QMainWindow):
-
-    def __init__(self, controller: Controller, app: QApplication, logger: Logger):
+    def __init__(self, controller: Controller, app: QApplication, logger: Logger, errorLogger: ErrorLogger):
+        self.errorLogger = errorLogger
+        self.logger = None
         super().__init__()
-        self.setWindowTitle("Smart Rewind Media Player") 
+        self.setWindowTitle("Smart Rewind Media Player")
+        try:
+            self.__init(controller, app, logger, errorLogger)
+        except Exception as e:
+            self.errorLogger.log({
+                "type": "EXCEPTION",
+                "error": str(e)
+            })
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setText("Error")
+            msg.setInformativeText(f'Error encountered: {e}')
+            msg.setWindowTitle("Error")
+            msg.exec_()
+            self.closeEvent(None)
+            raise Exception(e)
+
+    def __init(self, controller: Controller, app: QApplication, logger: Logger): 
         self.controller = controller
         self.app = app
         self.logger = logger
+
         videoWidget = QVideoWidget()
         # self.errorLabel = QLabel()
         # self.errorLabel.setSizePolicy(QSizePolicy.Preferred,
         #         QSizePolicy.Maximum)
 
         # Create new action
-        openAction = QAction(QIcon('open.png'), '&Open', self)        
+        openAction = QAction(QIcon('open.png'), '&Open', self)
         openAction.setShortcut('Ctrl+O')
         openAction.setStatusTip('Open movie')
         openAction.triggered.connect(self.openFile)
@@ -45,6 +64,7 @@ class Viewer(QMainWindow):
 
         # Create menu bar and add action
         menuBar = self.menuBar()
+        menuBar.setStyleSheet("border-top: 2px inset #e6e5e1;")
         fileMenu = menuBar.addMenu('&File')
         fileMenu.addAction(openAction)
         fileMenu.addAction(exitAction)
@@ -96,5 +116,7 @@ class Viewer(QMainWindow):
         sys.exit(self.app.exec_())
 
     def closeEvent(self, a0: QCloseEvent | None) -> None:
-        self.logger.stop()
+        if self.logger is not None:
+            self.logger.stop()
+        self.errorLogger.stop()
         return super().closeEvent(a0)
