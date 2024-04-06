@@ -14,6 +14,7 @@ class HoverButton(Button):
         self.menu = QMenu(self)
     
     def setOptions(self, actions: List[HoverButtonAction]):
+        self.menu.clear()
         for action in actions:
             qaction = QAction(action.name, self)
             qaction.triggered.connect(action.action)

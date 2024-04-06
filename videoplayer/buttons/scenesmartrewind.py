@@ -1,10 +1,11 @@
 from .base import Button
 from PyQt5 import QtGui
 from PyQt5.QtCore import QFileInfo
+from .common import resource_path
 
 class SceneSmartRewindButton(Button):
     def __init__(self, mediaPlayer, positionSlider, logger) -> None:
-        icon = QtGui.QIcon(QFileInfo(__file__).absolutePath() + '/../assets/scenesmartrewindicon.ico')
+        icon = QtGui.QIcon(resource_path('scenesmartrewindicon.ico'))
         super().__init__(icon, mediaPlayer, positionSlider, self.smartRewind, logger)
 
     def setup(self, model):

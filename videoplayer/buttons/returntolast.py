@@ -1,10 +1,11 @@
 from .base import Button
 from PyQt5 import QtGui
 from PyQt5.QtCore import QFileInfo
+from .common import resource_path
 
 class ReturnToLastTimestampButton(Button):
     def __init__(self, mediaPlayer, positionSlider, logger) -> None:
-        icon = QtGui.QIcon(QFileInfo(__file__).absolutePath() + '/../assets/returntotimestampicon.ico')
+        icon = QtGui.QIcon(resource_path('returntotimestampicon.ico'))
         super().__init__(icon, mediaPlayer, positionSlider, self._return, logger)
 
     def setup(self, model):

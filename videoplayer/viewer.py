@@ -25,7 +25,7 @@ class Viewer(QMainWindow):
         super().__init__()
         self.setWindowTitle("Smart Rewind Media Player")
         try:
-            self.__init(controller, app, logger, errorLogger)
+            self.__init(controller, app, logger)
         except Exception as e:
             self.errorLogger.log({
                 "type": "EXCEPTION",
