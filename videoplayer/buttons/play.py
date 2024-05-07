@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 class PlayButton(Button):
     def __init__(self, mediaPlayer: MediaPlayer, logger) -> None:
         super().__init__(QStyle.SP_MediaPlay, mediaPlayer, None, self.playorpause, logger)
+        self.setToolTip("Press to Play or Pause the video")
 
     def changeIcon(self):
         if self.mediaPlayer.state() == QMediaPlayer.PlayingState:

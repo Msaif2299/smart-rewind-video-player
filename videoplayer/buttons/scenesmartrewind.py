@@ -9,6 +9,7 @@ class SceneSmartRewindButton(Button):
         super().__init__(icon, mediaPlayer, positionSlider, self.smartRewind, logger)
 
     def setup(self, model):
+        self.setToolTip("Jump to last scene")
         self.model = model
         self.scene_slots = self.model.getSceneTimeslots()
         self.setEnabled(True)

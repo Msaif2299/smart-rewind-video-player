@@ -9,6 +9,7 @@ class ReturnToLastTimestampButton(Button):
         super().__init__(icon, mediaPlayer, positionSlider, self._return, logger)
 
     def setup(self, model):
+        self.setToolTip("Press to go back to saved timestamp")
         self.model = model
         self.setEnabled(True)
 

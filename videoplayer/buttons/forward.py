@@ -6,6 +6,7 @@ FORWARD_IN_MS = 10000
 class ForwardButton(Button):
     def __init__(self, mediaPlayer, logger) -> None:
         super().__init__(QStyle.SP_MediaSkipForward, mediaPlayer, None, self.forward, logger)
+        self.setToolTip(f"Jump Forward by {int(FORWARD_IN_MS/1000)}s")
 
     def forward(self):
         if self.mediaPlayer.duration() < self.mediaPlayer.position() + FORWARD_IN_MS:

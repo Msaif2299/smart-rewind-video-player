@@ -9,6 +9,7 @@ class SceneSmartForwardButton(Button):
         super().__init__(icon, mediaPlayer, positionSlider, self.smartForward, logger)
 
     def setup(self, model):
+        self.setToolTip("Jump to next scene")
         self.model = model
         self.scene_slots = self.model.getSceneTimeslots()
         self.setEnabled(True)

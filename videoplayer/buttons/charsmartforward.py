@@ -13,7 +13,11 @@ class CharacterSmartForwardButton(HoverButton):
         self.char_slots = self.model.get_char_timeslots()
         action_list = []
         for char_name, slots in self.char_slots.items():
-            action_list.append(HoverButtonAction(char_name.title(), self.smartForward(char_name, slots)))
+            action_list.append(HoverButtonAction(
+                char_name.title(),
+                self.smartForward(char_name, slots),
+                f"Jump to the next scene with {char_name.title()}"    
+            ))
         self.setOptions(action_list)
         self.setEnabled(True)
 

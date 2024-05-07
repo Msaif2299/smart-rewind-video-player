@@ -3,6 +3,7 @@ Stylesheet source: https://forum.qt.io/topic/41771/solved-setstylesheet-to-qpush
 """
 
 from PyQt5.QtWidgets import QPushButton, QStyle
+from PyQt5.QtCore import QTimer
 import winsound
 import sys
 from typing import Optional
@@ -25,6 +26,10 @@ class Button(QPushButton):
                     radius: 1.35, stop: 0 #fff, stop: 1 #888
                 );
                 padding: 5px;
+            }
+                           
+            QPushButton::menu-indicator {
+                width: 0px;
             }
 
             QPushButton:hover {

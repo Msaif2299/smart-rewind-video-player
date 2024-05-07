@@ -7,6 +7,7 @@ BACKWARD_IN_MS = 10000
 class BackwardButton(Button):
     def __init__(self, mediaPlayer, logger: Logger) -> None:
         super().__init__(QStyle.SP_MediaSkipBackward, mediaPlayer, None, self.backward, logger)
+        self.setToolTip(f"Rewind by {int(BACKWARD_IN_MS/1000)}s")
 
     def backward(self):
         if self.mediaPlayer.position() - BACKWARD_IN_MS < 0:
