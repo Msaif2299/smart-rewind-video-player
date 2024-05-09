@@ -10,14 +10,15 @@ import os
 
 def main():
     exitCode = 0
-    if not os.path.isdir("./videoplayer"):
-        os.mkdir("./videoplayer")
-    errorLogger = ErrorLogger("./videoplayer/errorlogs")
+    logsFolder = "./logs"
+    if not os.path.isdir(logsFolder):
+        os.mkdir(logsFolder)
+    errorLogger = ErrorLogger(logsFolder+"/error_logs")
     errorLogger.start()
     try:
         app = QApplication(sys.argv)
         model = Model()
-        logger = Logger("./videoplayer/logs")
+        logger = Logger(logsFolder+"/event_logs")
         logger.start()
         try:
             controller = Controller(model, logger)
@@ -26,12 +27,12 @@ def main():
             player.show()
             exitCode = app.exec_()
         except Exception as e:
-            print(f"Exception encountered: {e}")
+            print(f"App Exception encountered: {e}")
             logger.stop()
             errorLogger.stop()
             sys.exit(exitCode)
     except Exception as e:
-        print(f"Outer Exception encountered: {e}")
+        print(f"System Exception encountered: {e}")
         errorLogger.stop()
         sys.exit(1)
     logger.stop()

@@ -10,3 +10,4 @@ videoplayer/errorlogs
 dist
 build
 pyqt_settings.ini
+logs

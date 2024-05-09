@@ -1,8 +1,8 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from PyQt5.QtMultimedia import QMediaPlayer
-from PyQt5.QtMultimedia import QMediaPlayer
+from PyQt5.QtMultimediaWidgets import QVideoWidget
 if TYPE_CHECKING:
     from videoplayer.slider import Slider
     from videoplayer.model import Model
@@ -20,12 +20,18 @@ class MediaPlayer(QMediaPlayer):
         self.positionChanged.connect(self._positionChanged)
         self.durationChanged.connect(self._durationChanged)
         self.error.connect(self._handleError)
+        self.videoWidget = None
 
     def _mediaStateChanged(self, state):
         self.playbutton.changeIcon()
 
     def _positionChanged(self, position):
         self.slider.setValue(position)
+        subtitle_text = self.model.getCurrentSubtitle()
+        if subtitle_text == "":
+            self.videoWidget.hideText()
+            return
+        self.videoWidget.setText(subtitle_text)
 
     def _durationChanged(self, duration):
         self.slider.setRange(0, duration)
@@ -36,3 +42,7 @@ class MediaPlayer(QMediaPlayer):
         self.playbutton.setEnabled(False)
         print("Error: " + self.errorString())
         #self.errorLabel.setText("Error: " + self.mediaPlayer.errorString())
+
+    def setVideoOutput(self, surface: Optional[QVideoWidget]) -> None:
+        self.videoWidget = surface
+        super().setVideoOutput(surface)

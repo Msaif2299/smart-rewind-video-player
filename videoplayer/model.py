@@ -1,5 +1,27 @@
 import platform
 from PyQt5.QtCore import QSettings
+from dataclasses import dataclass
+
+@dataclass
+class Subtitle:
+    """
+    A class to represent a subtitle.
+
+    ...
+
+    Attributes
+    ----------
+    start : int
+        time from when the subtitle should be visible
+    end : int
+        time from when the subtitle should be hidden
+    text : str
+        text to display when subtitle is visible
+
+    """
+    start: int
+    end: int
+    text: str
 
 class Model:
     def __init__(self) -> None:
@@ -9,6 +31,8 @@ class Model:
         self.isWindows = platform.system() == "Windows"
         self.settings = QSettings("pyqt_settings.ini", QSettings.IniFormat)
         self.lastFolderOpened = self.settings.value("LastFolder")
+        self.subtitles = []
+        self.middle_index = 0
 
     def getLastOpenedFolder(self) -> str:
         return self.lastFolderOpened
@@ -25,6 +49,22 @@ class Model:
 
     def setStoredDuration(self, storedDuration: int):
         self.storedDuration = storedDuration
+
+    def convertToMS(self, hours: int, minutes: int, seconds: int, milliseconds: int) -> int:
+        return hours*60*60*1000 + minutes*60*1000 + seconds*1000 + milliseconds
+
+    def setSubtitles(self, subtitles):
+        self.subtitles = []
+        self.middle_index = 0
+        for subtitle in subtitles:
+            self.subtitles.append(
+                Subtitle(
+                    self.convertToMS(subtitle.start.hours, subtitle.start.minutes, subtitle.start.seconds, subtitle.start.milliseconds),
+                    self.convertToMS(subtitle.end.hours, subtitle.end.minutes, subtitle.end.seconds, subtitle.end.milliseconds),
+                    subtitle.text
+                )
+            )
+        self.middle_index = len(self.subtitles)//2
 
     # Converts milliseconds to format "HH:MM:SS"
     def convertToHHMMSS(self, millseconds: int) -> str:
@@ -62,3 +102,26 @@ class Model:
         
     def getSceneTimeslots(self):
         return self.scene_timeslots
+    
+    def getCurrentSubtitle(self) -> str:
+        '''
+        Calculates the current subtitle using the current timestamp.
+
+                Returns:
+                        subtitle (str): text of the subtitle
+        '''
+        if len(self.subtitles) <= 0:
+            return ""
+        # binary search
+        left = 0
+        right = len(self.subtitles)-1
+        while left <= right:
+            middle = (left + right)//2
+            subtitle = self.subtitles[middle]
+            if self.currentDuration >= subtitle.start and self.currentDuration <= subtitle.end:
+                return subtitle.text
+            if self.currentDuration < subtitle.start:
+                right = middle-1
+                continue
+            left = middle+1
+        return ""

@@ -10,13 +10,16 @@ Check how to add this codec "https://www.codecguide.com/configuration_tips.htm?v
 See if its possible to convert this to .exe file
 """
 from PyQt5.QtMultimediaWidgets import QVideoWidget
-from PyQt5.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QVBoxLayout, QWidget)
-from PyQt5.QtWidgets import QMainWindow,QWidget, QAction, QMessageBox
+from PyQt5.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QVBoxLayout, QWidget, QGraphicsLayout)
+from PyQt5.QtWidgets import QMainWindow,QWidget, QAction, QMessageBox, QLabel
 from PyQt5.QtGui import QCloseEvent, QIcon
+from PyQt5.QtCore import Qt, QSize
 import sys
+import traceback
 
 from controller import Controller
 from eventlogger import Logger, ErrorLogger
+from videosurface import VideoSurface
 
 class Viewer(QMainWindow):
     def __init__(self, controller: Controller, app: QApplication, logger: Logger, errorLogger: ErrorLogger):
@@ -29,12 +32,12 @@ class Viewer(QMainWindow):
         except Exception as e:
             self.errorLogger.log({
                 "type": "EXCEPTION",
-                "error": str(e)
+                "error": traceback.format_exc()
             })
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)
             msg.setText("Error")
-            msg.setInformativeText(f'Error encountered: {e}')
+            msg.setInformativeText(traceback.format_exc())
             msg.setWindowTitle("Error")
             msg.exec_()
             self.closeEvent(None)
@@ -45,7 +48,7 @@ class Viewer(QMainWindow):
         self.app = app
         self.logger = logger
 
-        videoWidget = QVideoWidget()
+        videoWidget = VideoSurface(self)
         # self.errorLabel = QLabel()
         # self.errorLabel.setSizePolicy(QSizePolicy.Preferred,
         #         QSizePolicy.Maximum)
@@ -93,7 +96,7 @@ class Viewer(QMainWindow):
         buttonLayout.addStretch()
 
         layout = QVBoxLayout()
-        layout.addWidget(videoWidget)
+        layout.addLayout(videoWidget.getLayout())
         layout.addLayout(controlLayout)
         layout.addLayout(buttonLayout)
         # layout.addWidget(self.errorLabel)

@@ -6,6 +6,8 @@ from buttons import PlayButton, ForwardButton, BackwardButton, CharacterSmartRew
 from slider import Slider
 from mediaplayer import MediaPlayer
 from eventlogger import Logger
+import os
+import pysrt
 
 class Controller:
     def __init__(self, model: Model, logger: Logger) -> None:
@@ -33,21 +35,28 @@ class Controller:
     def open_file(self, fileName, metadataFileName):
         self.model.setLastOpenedFolder("/".join(metadataFileName.split("/")[:-1]))
 
-        if metadataFileName != '':
-            with open(metadataFileName, "r") as f:
-                self.model.setTimeslots(eval(f.read()))
+        if metadataFileName == '':
+            return
+        with open(metadataFileName, "r") as f:
+            self.model.setTimeslots(eval(f.read()))
 
-        if fileName != '':
-            self.mediaPlayer.setMedia(
-                    QMediaContent(QUrl.fromLocalFile(fileName)))
-            self.playButton.setEnabled(True)
-            self.forwardButton.setEnabled(True)
-            self.backwardButton.setEnabled(True)
-            self.charSmartForwardButton.setup(self.model)
-            self.charSmartRewindButton.setup(self.model)
-            self.sceneRewindButton.setup(self.model)
-            self.sceneForwardButton.setup(self.model)
-            self.returnToTimestampButton.setup(self.model)
-            self.playButton.playorpause()
+        if fileName == '':
+            return
+        self.mediaPlayer.setMedia(
+                QMediaContent(QUrl.fromLocalFile(fileName)))
+        self.playButton.setEnabled(True)
+        self.forwardButton.setEnabled(True)
+        self.backwardButton.setEnabled(True)
+        self.charSmartForwardButton.setup(self.model)
+        self.charSmartRewindButton.setup(self.model)
+        self.sceneRewindButton.setup(self.model)
+        self.sceneForwardButton.setup(self.model)
+        self.returnToTimestampButton.setup(self.model)
+        self.playButton.playorpause()
+        subtitleFile = fileName.split(".")[0] + ".srt"
+        if not os.path.exists(subtitleFile):
+            return
+        self.model.setSubtitles(pysrt.open(subtitleFile))
+            
 
         
