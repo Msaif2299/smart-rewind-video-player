@@ -1,3 +1,7 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from videoplayer.model import Model
 from PyQt5.QtWidgets import QMenu, QAction
 from PyQt5.QtCore import QEvent
 from .base import Button
@@ -10,8 +14,8 @@ class HoverButtonAction:
         self.tooltip = tooltip
 
 class HoverButton(Button):
-    def __init__(self, icon, mediaPlayer, positionSlider, logger):
-        super().__init__(icon, mediaPlayer, positionSlider, None, logger)
+    def __init__(self, icon, mediaPlayer, positionSlider, logger, model):
+        super().__init__(icon, mediaPlayer, positionSlider, None, logger, model)
         self.setMouseTracking(True)
         self.menu = QMenu(self)
         self.setMenu(self.menu)

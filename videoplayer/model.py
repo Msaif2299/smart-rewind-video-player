@@ -1,5 +1,5 @@
 import platform
-from PyQt5.QtCore import QSettings
+from PyQt5.QtCore import QSettings, pyqtSignal, QObject
 from dataclasses import dataclass
 
 @dataclass
@@ -23,8 +23,12 @@ class Subtitle:
     end: int
     text: str
 
-class Model:
+class Model(QObject):
+    # Signals
+    alertSignal = pyqtSignal(str)
+
     def __init__(self) -> None:
+        super().__init__()
         self.currentDuration = 0
         self.totalDuration = 0
         self.storedDuration = 0
@@ -32,7 +36,7 @@ class Model:
         self.settings = QSettings("pyqt_settings.ini", QSettings.IniFormat)
         self.lastFolderOpened = self.settings.value("LastFolder")
         self.subtitles = []
-        self.middle_index = 0
+        self.isSubtitlesEnabled = False
 
     def getLastOpenedFolder(self) -> str:
         return self.lastFolderOpened
@@ -65,6 +69,9 @@ class Model:
                 )
             )
         self.middle_index = len(self.subtitles)//2
+
+    def setSubtitlesEnabled(self, isEnabled: bool):
+        self.isSubtitlesEnabled = isEnabled
 
     # Converts milliseconds to format "HH:MM:SS"
     def convertToHHMMSS(self, millseconds: int) -> str:
@@ -110,6 +117,8 @@ class Model:
                 Returns:
                         subtitle (str): text of the subtitle
         '''
+        if not self.isSubtitlesEnabled:
+            return ""
         if len(self.subtitles) <= 0:
             return ""
         # binary search

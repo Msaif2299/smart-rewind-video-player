@@ -1,12 +1,16 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from videoplayer.model import Model
 from .base import Button
 from PyQt5 import QtGui
 from PyQt5.QtCore import QFileInfo
 from .common import resource_path
 
 class ReturnToLastTimestampButton(Button):
-    def __init__(self, mediaPlayer, positionSlider, logger) -> None:
+    def __init__(self, mediaPlayer, positionSlider, logger, model: Model) -> None:
         icon = QtGui.QIcon(resource_path('returntotimestampicon.ico'))
-        super().__init__(icon, mediaPlayer, positionSlider, self._return, logger)
+        super().__init__(icon, mediaPlayer, positionSlider, self._return, logger, model)
 
     def setup(self, model):
         self.setToolTip("Press to go back to saved timestamp")
@@ -15,7 +19,7 @@ class ReturnToLastTimestampButton(Button):
 
     def _return(self):
         if not self.slider.isTickerVisible() or self.model.getStoredDuration() == 0:
-            self.alert(self.model.isWindows)
+            self.alert(self.model.isWindows, "No saved timestamp!")
             self.log_data(False, -1)
             return
         self.slider.hideTicker()

@@ -5,6 +5,8 @@ videoplayer/buttons/__pycache__
 videoplayer/slider/__pycache__
 videoplayer/mediaplayer/__pycache__
 videoplayer/eventlogger/__pycache__
+videoplayer/labels/__pycache__
+videoplayer/checkbox/__pycache__
 videoplayer/logs
 videoplayer/errorlogs
 dist

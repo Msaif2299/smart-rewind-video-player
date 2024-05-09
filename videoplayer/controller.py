@@ -6,6 +6,8 @@ from buttons import PlayButton, ForwardButton, BackwardButton, CharacterSmartRew
 from slider import Slider
 from mediaplayer import MediaPlayer
 from eventlogger import Logger
+from checkbox import SubtitleCheckBox
+from labels import AlertLabel
 import os
 import pysrt
 
@@ -15,14 +17,16 @@ class Controller:
         self.positionSlider = Slider()
         self.model = model
 
-        self.playButton = PlayButton(self.mediaPlayer, logger)
-        self.forwardButton = ForwardButton(self.mediaPlayer, logger)
-        self.backwardButton = BackwardButton(self.mediaPlayer, logger)
-        self.charSmartRewindButton = CharacterSmartRewindButton(self.mediaPlayer, self.positionSlider, logger)
-        self.sceneRewindButton = SceneSmartRewindButton(self.mediaPlayer, self.positionSlider, logger)
-        self.charSmartForwardButton = CharacterSmartForwardButton(self.mediaPlayer, self.positionSlider, logger)
-        self.sceneForwardButton = SceneSmartForwardButton(self.mediaPlayer, self.positionSlider, logger)
-        self.returnToTimestampButton = ReturnToLastTimestampButton(self.mediaPlayer, self.positionSlider, logger)
+        self.alertLabel = AlertLabel(self.model)
+        self.playButton = PlayButton(self.mediaPlayer, logger, self.model)
+        self.forwardButton = ForwardButton(self.mediaPlayer, logger, self.model)
+        self.backwardButton = BackwardButton(self.mediaPlayer, logger, self.model)
+        self.charSmartRewindButton = CharacterSmartRewindButton(self.mediaPlayer, self.positionSlider, logger, self.model)
+        self.sceneRewindButton = SceneSmartRewindButton(self.mediaPlayer, self.positionSlider, logger, self.model)
+        self.charSmartForwardButton = CharacterSmartForwardButton(self.mediaPlayer, self.positionSlider, logger, self.model)
+        self.sceneForwardButton = SceneSmartForwardButton(self.mediaPlayer, self.positionSlider, logger, self.model)
+        self.returnToTimestampButton = ReturnToLastTimestampButton(self.mediaPlayer, self.positionSlider, logger, self.model)
+        self.subtitlesEnabledCheckBox = SubtitleCheckBox(self.model, logger)
 
         self.mediaPlayer.setup(self.model, self.positionSlider, self.playButton)
         self.positionSlider.setup(self.model, self.mediaPlayer)
@@ -57,6 +61,7 @@ class Controller:
         if not os.path.exists(subtitleFile):
             return
         self.model.setSubtitles(pysrt.open(subtitleFile))
+        self.subtitlesEnabledCheckBox.enableCheckBox()
             
 
         

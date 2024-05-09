@@ -7,6 +7,7 @@ from controller import Controller
 from viewer import Viewer
 from eventlogger import Logger, ErrorLogger
 import os
+import traceback
 
 def main():
     exitCode = 0
@@ -27,12 +28,12 @@ def main():
             player.show()
             exitCode = app.exec_()
         except Exception as e:
-            print(f"App Exception encountered: {e}")
+            print(f"App Exception encountered: {traceback.format_exc()}")
             logger.stop()
             errorLogger.stop()
             sys.exit(exitCode)
     except Exception as e:
-        print(f"System Exception encountered: {e}")
+        print(f"System Exception encountered: {traceback.format_exc()}")
         errorLogger.stop()
         sys.exit(1)
     logger.stop()

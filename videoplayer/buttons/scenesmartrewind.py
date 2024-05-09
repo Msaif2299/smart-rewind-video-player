@@ -1,12 +1,16 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from videoplayer.model import Model
 from .base import Button
 from PyQt5 import QtGui
 from PyQt5.QtCore import QFileInfo
 from .common import resource_path
 
 class SceneSmartRewindButton(Button):
-    def __init__(self, mediaPlayer, positionSlider, logger) -> None:
+    def __init__(self, mediaPlayer, positionSlider, logger, model: Model) -> None:
         icon = QtGui.QIcon(resource_path('scenesmartrewindicon.ico'))
-        super().__init__(icon, mediaPlayer, positionSlider, self.smartRewind, logger)
+        super().__init__(icon, mediaPlayer, positionSlider, self.smartRewind, logger, model)
 
     def setup(self, model):
         self.setToolTip("Jump to last scene")
@@ -26,7 +30,7 @@ class SceneSmartRewindButton(Button):
             self.log_data(True, slot[0])
             self.mediaPlayer.setPosition(slot[0])
             return
-        self.alert(self.model.isWindows)
+        self.alert(self.model.isWindows, f"No scene found before current scene!")
         self.log_data(False, -1)
 
     def log_data(self, success: bool, new_timestamp: int) -> str:

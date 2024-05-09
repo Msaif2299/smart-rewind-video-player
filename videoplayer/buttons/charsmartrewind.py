@@ -1,12 +1,16 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from videoplayer.model import Model
 from PyQt5 import QtGui
 from PyQt5.QtCore import QFileInfo
 from .hoverbutton import HoverButton, HoverButtonAction
 from .common import resource_path
 
 class CharacterSmartRewindButton(HoverButton):
-    def __init__(self, mediaPlayer, positionSlider, logger) -> None:
+    def __init__(self, mediaPlayer, positionSlider, logger, model: Model) -> None:
         icon = QtGui.QIcon(resource_path('charsmartrewindicon.ico'))
-        super().__init__(icon, mediaPlayer, positionSlider, logger)
+        super().__init__(icon, mediaPlayer, positionSlider, logger, model)
 
     def setup(self, model):
         self.model = model
@@ -34,7 +38,7 @@ class CharacterSmartRewindButton(HoverButton):
                 self.log_data(char_name, True, slot[0])
                 self.mediaPlayer.setPosition(slot[0])
                 return
-            self.alert(self.model.isWindows)
+            self.alert(self.model.isWindows, f"No scene found for {char_name.title()} before current scene!")
             self.log_data(char_name, False, -1)
         return rewind
     

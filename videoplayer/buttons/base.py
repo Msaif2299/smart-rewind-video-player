@@ -1,7 +1,8 @@
 """
 Stylesheet source: https://forum.qt.io/topic/41771/solved-setstylesheet-to-qpushbutton-rounded-corners/12
 """
-
+from __future__ import annotations
+from typing import TYPE_CHECKING
 from PyQt5.QtWidgets import QPushButton, QStyle
 from PyQt5.QtCore import QTimer
 import winsound
@@ -10,9 +11,11 @@ from typing import Optional
 from slider import Slider
 from mediaplayer import MediaPlayer
 from eventlogger import Logger
+if TYPE_CHECKING:
+    from videoplayer.model import Model
 
 class Button(QPushButton):
-    def __init__(self, icon, mediaPlayer: MediaPlayer, positionSlider: Optional[Slider], action, logger: Logger) -> None:
+    def __init__(self, icon, mediaPlayer: MediaPlayer, positionSlider: Optional[Slider], action, logger: Logger, model: Model) -> None:
         super().__init__()
         self.setEnabled(False)
         self.setStyleSheet("""
@@ -56,8 +59,10 @@ class Button(QPushButton):
         self.mediaPlayer = mediaPlayer
         self.slider = positionSlider
         self.logger = logger
+        self.model = model
 
-    def alert(self, isWindows):
+    def alert(self, isWindows: bool, message: str):
+        self.model.alertSignal.emit(message)
         if isWindows:
             winsound.MessageBeep(winsound.MB_ICONEXCLAMATION) 
             return  

@@ -53,7 +53,7 @@ class ErrorLogger:
         
 
 if __name__ == "__main__":
-    log = Logger("./error_logs")
+    log = ErrorLogger("./error_logs")
     log.start()
     for x in range(100):
         log.log(f"testing {x}")

@@ -1,12 +1,17 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from videoplayer.model import Model
 from PyQt5.QtWidgets import QStyle
 from .base import Button
 from eventlogger import Logger
 
+
 BACKWARD_IN_MS = 10000
 
 class BackwardButton(Button):
-    def __init__(self, mediaPlayer, logger: Logger) -> None:
-        super().__init__(QStyle.SP_MediaSkipBackward, mediaPlayer, None, self.backward, logger)
+    def __init__(self, mediaPlayer, logger: Logger, model: Model) -> None:
+        super().__init__(QStyle.SP_MediaSkipBackward, mediaPlayer, None, self.backward, logger, model)
         self.setToolTip(f"Rewind by {int(BACKWARD_IN_MS/1000)}s")
 
     def backward(self):

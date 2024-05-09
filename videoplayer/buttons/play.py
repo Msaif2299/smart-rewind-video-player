@@ -5,10 +5,11 @@ from PyQt5.QtMultimedia import QMediaPlayer
 from .base import Button
 if TYPE_CHECKING:
     from videoplayer.mediaplayer import MediaPlayer
+    from videoplayer.model import Model
 
 class PlayButton(Button):
-    def __init__(self, mediaPlayer: MediaPlayer, logger) -> None:
-        super().__init__(QStyle.SP_MediaPlay, mediaPlayer, None, self.playorpause, logger)
+    def __init__(self, mediaPlayer: MediaPlayer, logger, model: Model) -> None:
+        super().__init__(QStyle.SP_MediaPlay, mediaPlayer, None, self.playorpause, logger, model)
         self.setToolTip("Press to Play or Pause the video")
 
     def changeIcon(self):

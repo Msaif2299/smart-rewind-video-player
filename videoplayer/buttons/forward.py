@@ -1,11 +1,15 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from videoplayer.model import Model
 from PyQt5.QtWidgets import QStyle
 from .base import Button
 
 FORWARD_IN_MS = 10000
 
 class ForwardButton(Button):
-    def __init__(self, mediaPlayer, logger) -> None:
-        super().__init__(QStyle.SP_MediaSkipForward, mediaPlayer, None, self.forward, logger)
+    def __init__(self, mediaPlayer, logger, model) -> None:
+        super().__init__(QStyle.SP_MediaSkipForward, mediaPlayer, None, self.forward, logger, model)
         self.setToolTip(f"Jump Forward by {int(FORWARD_IN_MS/1000)}s")
 
     def forward(self):

@@ -9,17 +9,17 @@ Add smart rewind button functionality and add visual markers on progress bar
 Check how to add this codec "https://www.codecguide.com/configuration_tips.htm?version=1820" as a requirement
 See if its possible to convert this to .exe file
 """
-from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QVBoxLayout, QWidget, QGraphicsLayout)
-from PyQt5.QtWidgets import QMainWindow,QWidget, QAction, QMessageBox, QLabel
+from PyQt5.QtWidgets import QMainWindow,QWidget, QAction, QMessageBox, QLabel, QCheckBox, QSpacerItem, QSizePolicy
 from PyQt5.QtGui import QCloseEvent, QIcon
-from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtCore import Qt
 import sys
 import traceback
 
 from controller import Controller
 from eventlogger import Logger, ErrorLogger
 from videosurface import VideoSurface
+from labels import AlertLabel
 
 class Viewer(QMainWindow):
     def __init__(self, controller: Controller, app: QApplication, logger: Logger, errorLogger: ErrorLogger):
@@ -49,9 +49,6 @@ class Viewer(QMainWindow):
         self.logger = logger
 
         videoWidget = VideoSurface(self)
-        # self.errorLabel = QLabel()
-        # self.errorLabel.setSizePolicy(QSizePolicy.Preferred,
-        #         QSizePolicy.Maximum)
 
         # Create new action
         openAction = QAction(QIcon('open.png'), '&Open', self)
@@ -93,13 +90,15 @@ class Viewer(QMainWindow):
         buttonLayout.addWidget(self.controller.sceneForwardButton)
         buttonLayout.addWidget(self.controller.charSmartForwardButton)
         buttonLayout.addWidget(self.controller.returnToTimestampButton)
+        buttonLayout.addItem(QSpacerItem(50, 10))
+        buttonLayout.addWidget(self.controller.subtitlesEnabledCheckBox, alignment=Qt.AlignmentFlag.AlignRight)
         buttonLayout.addStretch()
 
         layout = QVBoxLayout()
         layout.addLayout(videoWidget.getLayout())
         layout.addLayout(controlLayout)
         layout.addLayout(buttonLayout)
-        # layout.addWidget(self.errorLabel)
+        layout.addWidget(self.controller.alertLabel)
 
         # Set widget to contain window contents
         wid.setLayout(layout)
@@ -123,3 +122,6 @@ class Viewer(QMainWindow):
             self.logger.stop()
         self.errorLogger.stop()
         return super().closeEvent(a0)
+    
+    def setAlertLabel(self, value):
+        self.alertLabel.text(value)
