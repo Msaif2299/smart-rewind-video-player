@@ -5,8 +5,7 @@ version="0.1.0"
 description="Smart Rewind Video Player for Accessibility Interventions"
 dependencies=[
     "pyqt5",
-    "pysrt",
-    "qtawesome"
+    "pysrt"
 ]
 
 [build-system]
