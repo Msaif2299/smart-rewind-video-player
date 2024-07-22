@@ -6,6 +6,11 @@ from PyQt5.QtWidgets import QStyle
 if TYPE_CHECKING:
     from videoplayer.model import Model
 
+"""
+Icon and text label: https://stackoverflow.com/questions/10533838/displaying-a-standard-icon-and-text-in-qlabel
+    
+"""
+
 class AlertLabel(QWidget):
     IconSize = QSize(16, 16)
     HorizontalSpacing = 2

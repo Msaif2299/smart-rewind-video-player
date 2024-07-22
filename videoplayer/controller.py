@@ -8,6 +8,7 @@ from mediaplayer import MediaPlayer
 from eventlogger import Logger
 from checkbox import SubtitleCheckBox
 from labels import AlertLabel
+from cardpanels import CharSmartForwardPanel, CharSmartRewindPanel
 import os
 import pysrt
 
@@ -16,20 +17,27 @@ class Controller:
         self.mediaPlayer = MediaPlayer()
         self.positionSlider = Slider()
         self.model = model
+        self.logger = logger
 
         self.alertLabel = AlertLabel(self.model)
-        self.playButton = PlayButton(self.mediaPlayer, logger, self.model)
-        self.forwardButton = ForwardButton(self.mediaPlayer, logger, self.model)
-        self.backwardButton = BackwardButton(self.mediaPlayer, logger, self.model)
-        self.charSmartRewindButton = CharacterSmartRewindButton(self.mediaPlayer, self.positionSlider, logger, self.model)
-        self.sceneRewindButton = SceneSmartRewindButton(self.mediaPlayer, self.positionSlider, logger, self.model)
-        self.charSmartForwardButton = CharacterSmartForwardButton(self.mediaPlayer, self.positionSlider, logger, self.model)
-        self.sceneForwardButton = SceneSmartForwardButton(self.mediaPlayer, self.positionSlider, logger, self.model)
-        self.returnToTimestampButton = ReturnToLastTimestampButton(self.mediaPlayer, self.positionSlider, logger, self.model)
-        self.subtitlesEnabledCheckBox = SubtitleCheckBox(self.model, logger)
+        self.playButton = PlayButton(self.mediaPlayer, self.logger, self.model)
+        self.forwardButton = ForwardButton(self.mediaPlayer, self.logger, self.model)
+        self.backwardButton = BackwardButton(self.mediaPlayer, self.logger, self.model)
+        # self.charSmartRewindButton = CharacterSmartRewindButton(self.mediaPlayer, self.positionSlider, self.logger, self.model)
+        self.sceneRewindButton = SceneSmartRewindButton(self.mediaPlayer, self.positionSlider, self.logger, self.model)
+        # self.charSmartForwardButton = CharacterSmartForwardButton(self.mediaPlayer, self.positionSlider, self.logger, self.model)
+        self.sceneForwardButton = SceneSmartForwardButton(self.mediaPlayer, self.positionSlider, self.logger, self.model)
+        self.returnToTimestampButton = ReturnToLastTimestampButton(self.mediaPlayer, self.positionSlider, self.logger, self.model)
+        self.subtitlesEnabledCheckBox = SubtitleCheckBox(self.model, self.logger)
+
+        self.setupSidePanels()
 
         self.mediaPlayer.setup(self.model, self.positionSlider, self.playButton)
         self.positionSlider.setup(self.model, self.mediaPlayer)
+
+    def setupSidePanels(self):
+        self.charSmartForwardPanel = CharSmartForwardPanel(self.mediaPlayer,self.positionSlider, self.model,  self.logger)
+        self.charSmartRewindPanel = CharSmartRewindPanel(self.mediaPlayer, self.positionSlider, self.model, self.logger)
 
     def getLastOpenedFolder(self) -> str:
         if self.model.getLastOpenedFolder() == "" or self.model.getLastOpenedFolder() is None:
@@ -51,12 +59,15 @@ class Controller:
         self.playButton.setEnabled(True)
         self.forwardButton.setEnabled(True)
         self.backwardButton.setEnabled(True)
-        self.charSmartForwardButton.setup(self.model)
-        self.charSmartRewindButton.setup(self.model)
+        # self.charSmartForwardButton.setup(self.model)
+        # self.charSmartRewindButton.setup(self.model)
         self.sceneRewindButton.setup(self.model)
         self.sceneForwardButton.setup(self.model)
         self.returnToTimestampButton.setup(self.model)
         self.playButton.playorpause()
+        charImageFolder = self.getLastOpenedFolder() + "/character_images"
+        self.charSmartForwardPanel.populateCharacters(charImageFolder)
+        self.charSmartRewindPanel.populateCharacters(charImageFolder)
         subtitleFile = fileName.split(".")[0] + ".srt"
         if not os.path.exists(subtitleFile):
             return

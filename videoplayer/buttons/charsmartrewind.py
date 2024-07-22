@@ -12,9 +12,9 @@ class CharacterSmartRewindButton(HoverButton):
         icon = QtGui.QIcon(resource_path('charsmartrewindicon.ico'))
         super().__init__(icon, mediaPlayer, positionSlider, logger, model)
 
-    def setup(self, model):
+    def setup(self, model: Model):
         self.model = model
-        self.char_slots = self.model.get_char_timeslots()
+        self.char_slots = self.model.getCharTimeslots()
         action_list = []
         for char_name, slots in self.char_slots.items():
             action_list.append(HoverButtonAction(
@@ -27,6 +27,8 @@ class CharacterSmartRewindButton(HoverButton):
 
     def smartRewind(self, char_name, slots):
         def rewind():
+            self.model.setCurrentChosenCharacter(char_name)
+            self.model.populateTimestampSignal.emit()
             cur_time = self.model.getCurrentDuration()
             for slot in reversed(slots):
                 if slot[1] >= cur_time:

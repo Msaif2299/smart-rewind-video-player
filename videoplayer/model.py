@@ -1,6 +1,7 @@
 import platform
 from PyQt5.QtCore import QSettings, pyqtSignal, QObject
 from dataclasses import dataclass
+from typing import List, Dict
 
 @dataclass
 class Subtitle:
@@ -26,6 +27,9 @@ class Subtitle:
 class Model(QObject):
     # Signals
     alertSignal = pyqtSignal(str)
+    populateTimestampSignal = pyqtSignal()
+    updateForwardCardsSignal = pyqtSignal()
+    updateRewindCardsSignal = pyqtSignal()
 
     def __init__(self) -> None:
         super().__init__()
@@ -37,6 +41,8 @@ class Model(QObject):
         self.lastFolderOpened = self.settings.value("LastFolder")
         self.subtitles = []
         self.isSubtitlesEnabled = False
+        self.currentChosenCharacter = ""
+        self.isForwardPanelClicked = False # if not, then assume backward panel
 
     def getLastOpenedFolder(self) -> str:
         return self.lastFolderOpened
@@ -98,14 +104,20 @@ class Model(QObject):
     def getStoredDuration(self) -> int:
         return self.storedDuration
     
+    def setCurrentChosenCharacter(self, char_name):
+        self.currentChosenCharacter = char_name
+
+    def setIsForwardPanelClicked(self, isClicked: bool):
+        self.isForwardPanelClicked = isClicked
+    
     def setTimeslots(self, data):
-        self.character_timeslots = []
+        self.characterTimeslots = []
         self.scene_timeslots = []
-        self.character_timeslots = data["CHAR"]
+        self.characterTimeslots = data["CHAR"]
         self.scene_timeslots = data["SEG"]
 
-    def get_char_timeslots(self):
-        return self.character_timeslots
+    def getCharTimeslots(self) -> Dict[str, List[List[int]]]:
+        return self.characterTimeslots
         
     def getSceneTimeslots(self):
         return self.scene_timeslots

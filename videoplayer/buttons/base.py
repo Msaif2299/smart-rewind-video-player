@@ -4,7 +4,7 @@ Stylesheet source: https://forum.qt.io/topic/41771/solved-setstylesheet-to-qpush
 from __future__ import annotations
 from typing import TYPE_CHECKING
 from PyQt5.QtWidgets import QPushButton, QStyle
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, QSize
 import winsound
 import sys
 from typing import Optional
@@ -18,11 +18,12 @@ class Button(QPushButton):
     def __init__(self, icon, mediaPlayer: MediaPlayer, positionSlider: Optional[Slider], action, logger: Logger, model: Model) -> None:
         super().__init__()
         self.setEnabled(False)
+        self.setFixedSize(QSize(50, 50))
         self.setStyleSheet("""
             QPushButton {
                 color: #333;
                 border: 2px solid #555;
-                border-radius: 20px;
+                border-radius: 25px;
                 border-style: outset;
                 background: qradialgradient(
                     cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,

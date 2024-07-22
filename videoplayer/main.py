@@ -24,7 +24,7 @@ def main():
         try:
             controller = Controller(model, logger)
             player = Viewer(controller, app, logger, errorLogger)
-            player.resize(640, 480)
+            player.showMaximized()
             player.show()
             exitCode = app.exec_()
         except Exception as e:

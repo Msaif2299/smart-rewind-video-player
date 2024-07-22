@@ -82,13 +82,18 @@ class Viewer(QMainWindow):
         buttonLayout = QHBoxLayout()
         buttonLayout.setContentsMargins(0, 0, 0, 0)
         buttonLayout.addStretch()
-        buttonLayout.addWidget(self.controller.charSmartRewindButton)
+        # buttonLayout.addWidget(self.controller.charSmartRewindButton)
         buttonLayout.addWidget(self.controller.sceneRewindButton)
+        buttonLayout.addItem(QSpacerItem(25, 10))
         buttonLayout.addWidget(self.controller.backwardButton)
+        buttonLayout.addItem(QSpacerItem(25, 10))
         buttonLayout.addWidget(self.controller.playButton)
+        buttonLayout.addItem(QSpacerItem(25, 10))
         buttonLayout.addWidget(self.controller.forwardButton)
+        buttonLayout.addItem(QSpacerItem(25, 10))
         buttonLayout.addWidget(self.controller.sceneForwardButton)
-        buttonLayout.addWidget(self.controller.charSmartForwardButton)
+        buttonLayout.addItem(QSpacerItem(25, 10))
+        # buttonLayout.addWidget(self.controller.charSmartForwardButton)
         buttonLayout.addWidget(self.controller.returnToTimestampButton)
         buttonLayout.addItem(QSpacerItem(50, 10))
         buttonLayout.addWidget(self.controller.subtitlesEnabledCheckBox, alignment=Qt.AlignmentFlag.AlignRight)
@@ -100,8 +105,13 @@ class Viewer(QMainWindow):
         layout.addLayout(buttonLayout)
         layout.addWidget(self.controller.alertLabel)
 
+        sidePanelsLayout = QHBoxLayout()
+        sidePanelsLayout.addWidget(self.controller.charSmartRewindPanel)
+        sidePanelsLayout.addLayout(layout)
+        sidePanelsLayout.addWidget(self.controller.charSmartForwardPanel)
+
         # Set widget to contain window contents
-        wid.setLayout(layout)
+        wid.setLayout(sidePanelsLayout)
 
         self.controller.mediaPlayer.setVideoOutput(videoWidget)
 

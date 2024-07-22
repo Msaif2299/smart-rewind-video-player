@@ -12,9 +12,9 @@ class CharacterSmartForwardButton(HoverButton):
         icon = QtGui.QIcon(resource_path('charsmartfowardicon.ico'))
         super().__init__(icon, mediaPlayer, positionSlider, logger, model)
 
-    def setup(self, model):
+    def setup(self, model: Model):
         self.model = model
-        self.char_slots = self.model.get_char_timeslots()
+        self.char_slots = self.model.getCharTimeslots()
         action_list = []
         for char_name, slots in self.char_slots.items():
             action_list.append(HoverButtonAction(
@@ -27,6 +27,8 @@ class CharacterSmartForwardButton(HoverButton):
 
     def smartForward(self, char_name, slots):
         def forward():
+            self.model.setCurrentChosenCharacter(char_name)
+            self.model.populateTimestampSignal.emit()
             cur_time = self.model.getCurrentDuration()
             for slot in slots:
                 if slot[0] <= cur_time:
