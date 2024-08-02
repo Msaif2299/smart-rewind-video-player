@@ -45,6 +45,7 @@ class ClickablePanel(QWidget):
         scrollArea.setFixedWidth(175)
         scrollArea.horizontalScrollBar().setEnabled(False)
         scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         return scrollArea
 
     def populateCharacters(self, imgFolder: str):
@@ -67,6 +68,7 @@ class ClickablePanel(QWidget):
             layout.addWidget(cardView)
             card.view = cardView
             self.cards.append(card)
+        layout.addStretch()
         holderWidget = QWidget()
         holderWidget.setLayout(layout)
         holderWidget.setFixedWidth(200)
