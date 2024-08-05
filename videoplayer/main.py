@@ -1,3 +1,7 @@
+"""
+Code Source: https://pythonprogramminglanguage.com/pyqt5-video-widget/
+"""
+
 from PyQt5.QtWidgets import QApplication
 
 import sys
