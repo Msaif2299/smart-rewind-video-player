@@ -54,13 +54,15 @@ class Controller:
 
         if fileName == '':
             return
+        self.model.reset()
+        self.positionSlider.hideTicker()
+        self.mediaPlayer.stop()
+        self.mediaPlayer.setMedia(QMediaContent())
         self.mediaPlayer.setMedia(
                 QMediaContent(QUrl.fromLocalFile(fileName)))
         self.playButton.setEnabled(True)
         self.forwardButton.setEnabled(True)
         self.backwardButton.setEnabled(True)
-        # self.charSmartForwardButton.setup(self.model)
-        # self.charSmartRewindButton.setup(self.model)
         self.sceneRewindButton.setup(self.model)
         self.sceneForwardButton.setup(self.model)
         self.returnToTimestampButton.setup(self.model)

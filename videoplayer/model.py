@@ -146,3 +146,12 @@ class Model(QObject):
                 continue
             left = middle+1
         return ""
+    
+    def reset(self):
+        self.currentDuration = 0
+        self.totalDuration = 0
+        self.storedDuration = 0
+        self.subtitles = []
+        self.isSubtitlesEnabled = False
+        self.currentChosenCharacter = ""
+        self.isForwardPanelClicked = False # if not, then assume backward panel
